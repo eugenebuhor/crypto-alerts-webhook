@@ -20,12 +20,12 @@ app.get('/twiml.xml', (req, res) => {
   res.send(`
         <?xml version="1.0" encoding="UTF-8"?>
         <Response>
-            <Say voice="alice">Testing message.</Say>
+            <Say voice="alice">Crypto alert!</Say>
         </Response>
     `);
 });
 
-app.get('/trigger-calls', (req, res) => {
+app.post('/trigger-calls', (req, res) => {
   const twimlUrl = `${req.protocol}://${req.get('host')}/twiml.xml`;
 
   const promises = PHONE_NUMBERS.map(number => {
@@ -37,9 +37,8 @@ app.get('/trigger-calls', (req, res) => {
   });
 
   Promise.all(promises)
-    .then(results => {
-      const message = results.map(call => `Call initiated with SID: ${call.sid}`).join(', ');
-      res.send(message);
+    .then(() => {
+      res.send('Calls initiated successfully');
     })
     .catch(error => {
       console.error(error);
