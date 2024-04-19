@@ -13,7 +13,9 @@ const PORT = process.env.PORT || 3000;
 
 const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
-app.get('/twiml', (req, res) => {
+app.get('/', (req, res) => res.send('OK'));
+
+app.get('/twiml.xml', (req, res) => {
   res.type('text/xml');
   res.send(`
         <?xml version="1.0" encoding="UTF-8"?>
@@ -24,7 +26,7 @@ app.get('/twiml', (req, res) => {
 });
 
 app.get('/trigger-calls', (req, res) => {
-  const twimlUrl = `${req.protocol}://${req.get('host')}/twiml`;
+  const twimlUrl = `${req.protocol}://${req.get('host')}/twiml.xml`;
 
   const promises = PHONE_NUMBERS.map(number => {
     return client.calls.create({
